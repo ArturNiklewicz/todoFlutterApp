@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/main.dart';
-import 'package:todo_app/ui/widgets/taskCard.dart';
+import 'package:todo_app/models/todo.dart';
+import 'package:todo_app/ui/screens/subtask_screen.dart';
+import 'package:todo_app/ui/widgets/new_task.dart';
+import 'package:todo_app/ui/widgets/task_list.dart';
 
 class HomePage extends StatefulWidget {
-  static int taskNumber = 0;
-  HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -12,46 +13,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final String title = "#1 TODO App";
-  DateTime selectedDate = DateTime.now();
-  double _value = 1.0;
-
-  void _incrementCounter() {
-    setState(() {
-      HomePage.taskNumber++;
-    });
-  }
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate)
-      setState(() {
-        selectedDate = picked;
-      });
-  }
-
-  void _showAddTaskPopUp() async {
-    // <-- note the async keyword here
-
-    // this will contain the result from Navigator.pop(context, result)
-    final selectedWeight = await showDialog<double>(
-      context: context,
-      builder: (context) => AddTaskPopUp(initialWeight: _value),
-    );
-
-    // execution of this code continues when the dialog was closed (popped)
-
-    // note that the result can also be null, so check it
-    // (back button or pressed outside of the dialog)
-    if (selectedWeight != null) {
-      setState(() {
-        _value = selectedWeight;
-      });
-    }
-  }
+  double _weight = 1.0;
+  static List<Todo> userTasks = [
+    Todo(deadline: DateTime.now(), title: 'Dupa', weight: 1, status: false)
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -59,88 +24,33 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(title),
       ),
-      body: Center(
-          child: ListView.builder(
-        itemCount: HomePage.taskNumber,
-        itemBuilder: (context, index) {
-          return TaskCard();
-        },
-        // In this example, each String is on its own l
-      )),
+      body: TaskList(userTasks),
       floatingActionButton: FloatingActionButton(
-        onPressed: _showAddTaskPopUp,
+        onPressed: () {
+          _showAddTaskPopUp();
+        },
         tooltip: 'Add a task',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
-  Widget _buildPopupDialog(BuildContext context) {
-    return AlertDialog(
-      title: const TextField(
-        decoration: InputDecoration(
-            border: OutlineInputBorder(), hintText: "Name of the task"),
-      ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Slider(
-            min: 0.0,
-            max: 10.0,
-            value: _value,
-            onChanged: (value) {
-              setState(() {
-                _value = value;
-              });
-            },
-          ),
-          Divider(),
-          IconButton(
-              onPressed: () => _selectDate(context),
-              icon: Icon(Icons.calendar_today))
-        ],
-      ),
-      actions: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            CircleAvatar(
-              radius: 20,
-              backgroundColor: Colors.red,
-              child: new IconButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(
-                  Icons.close,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            CircleAvatar(
-              radius: 20,
-              backgroundColor: Colors.green,
-              child: new IconButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(
-                  Icons.add_task,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ],
-        )
-      ],
+  void _showAddTaskPopUp() async {
+    final selectedWeight = await showDialog<double>(
+      context: context,
+      builder: (context) => AddTaskPopUp(initialWeight: _weight),
     );
+
+    if (selectedWeight != null) {
+      setState(() {
+        _weight = selectedWeight;
+      });
+    }
   }
 }
 
 class AddTaskPopUp extends StatefulWidget {
-  /// initial selection for the slider
-  double? initialWeight = 1;
+  double? initialWeight;
 
   AddTaskPopUp({Key? key, this.initialWeight}) : super(key: key);
 
@@ -149,44 +59,32 @@ class AddTaskPopUp extends StatefulWidget {
 }
 
 class _AddTaskPopUpState extends State<AddTaskPopUp> {
-  /// current selection of the slider
-  double? _value = 0;
+  DateTime today = DateTime.now();
 
-  @override
-  void initState() {
-    super.initState();
-    _value = widget.initialWeight;
+  void addNewTask(String title, double weight, DateTime deadline, bool status) {
+    final newTask = Todo(
+        title: title,
+        weight: weight,
+        deadline: deadline.toString().isEmpty ? today : deadline,
+        status: status);
+
+    setState(() {
+      _HomePageState.userTasks.add(newTask);
+    });
+    int i = 0;
+    bool endOfLoop = i <= _HomePageState.userTasks.length;
+    for (Todo todo in _HomePageState.userTasks) {
+      if (endOfLoop == false) {
+        print(_HomePageState.userTasks[i].toString());
+        i++;
+      } else {
+        break;
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text('Add a task'),
-      content: Column(
-        children: [
-          Text('Weight: ${_value!.toStringAsPrecision(2)}'),
-          Slider(
-            min: 0.0,
-            max: 10.0,
-            value: _value!.toDouble(),
-            onChanged: (value) {
-              setState(() {
-                _value = value;
-              });
-            },
-          ),
-        ],
-      ),
-      actions: <Widget>[
-        FlatButton(
-          onPressed: () {
-            // Use the second argument of Navigator.pop(...) to pass
-            // back a result to the page that opened the dialog
-            Navigator.pop(context, _value);
-          },
-          child: Text('DONE'),
-        )
-      ],
-    );
+    return NewTask(addNewTask);
   }
 }
