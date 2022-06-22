@@ -20,20 +20,11 @@ class TaskList extends StatelessWidget {
             : ListView.builder(
                 itemCount: tasks!.length,
                 itemBuilder: (context, index) {
-                  return GestureDetector(
-                    child: TaskCard(
-                      taskName: tasks![index].title,
-                      taskWeight: tasks![index].weight,
-                      taskDeadline: tasks![index].deadline,
-                      taskStatus: tasks![index].status,
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  SubTaskScreen(todo: tasks![index])));
-                    },
+                  return TaskCard(
+                    taskName: tasks![index].title,
+                    taskWeight: tasks![index].weight,
+                    taskDeadline: tasks![index].deadline,
+                    taskStatus: tasks![index].status,
                   );
                   // return TaskCard();
                 },
@@ -79,18 +70,6 @@ class _TaskCardState extends State<TaskCard> {
     }
 
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          // Go to SubTaskScreen
-          /* context, '/subtask_screen' */
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Text('dupa')
-                // SubTaskScreen(todo: _HomePageState.userTasks[1]),
-                ),
-          );
-        });
-      },
       child: SizedBox(
         height: screenHeight / 5,
         width: screenWidth,
@@ -130,6 +109,13 @@ class _TaskCardState extends State<TaskCard> {
           ]),
         ),
       ),
+      onTap: () {
+        // Go to SubTaskScreen
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Text('j')),
+        );
+      },
     );
   }
 }

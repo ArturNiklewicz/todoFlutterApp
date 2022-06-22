@@ -11,13 +11,12 @@ class NewTask extends StatefulWidget {
 
 class _NewTaskState extends State<NewTask> {
   final nameController = TextEditingController();
+  late bool status;
   String enteredName = "";
   double _value = 0;
   DateTime selectedDate = DateTime.now();
   DateTime fiftyDaysFromNow = DateTime.now().add(const Duration(days: 50));
   DateTime sevenDaysAgo = DateTime.now().subtract(const Duration(days: 7));
-
-  late bool status;
 
   String _checkName() {
     if (nameController.text == null ||

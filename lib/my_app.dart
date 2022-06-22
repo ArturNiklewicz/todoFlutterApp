@@ -10,6 +10,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/home',
       routes: {
         '/home': (context) => const TodosScreen(),
+        
       },
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue),
