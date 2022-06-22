@@ -4,14 +4,14 @@ import 'package:todo_app/ui/screens/subtask_screen.dart';
 import 'package:todo_app/ui/widgets/new_task.dart';
 import 'package:todo_app/ui/widgets/task_list.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class TodosScreen extends StatefulWidget {
+  const TodosScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<TodosScreen> createState() => _TodosScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _TodosScreenState extends State<TodosScreen> {
   final String title = "#1 TODO App";
   double _weight = 1.0;
   static List<Todo> userTasks = [
@@ -69,13 +69,13 @@ class _AddTaskPopUpState extends State<AddTaskPopUp> {
         status: status);
 
     setState(() {
-      _HomePageState.userTasks.add(newTask);
+      _TodosScreenState.userTasks.add(newTask);
     });
     int i = 0;
-    bool endOfLoop = i <= _HomePageState.userTasks.length;
-    for (Todo todo in _HomePageState.userTasks) {
+    bool endOfLoop = i <= _TodosScreenState.userTasks.length;
+    for (Todo todo in _TodosScreenState.userTasks) {
       if (endOfLoop == false) {
-        print(_HomePageState.userTasks[i].toString());
+        print(_TodosScreenState.userTasks[i].toString());
         i++;
       } else {
         break;

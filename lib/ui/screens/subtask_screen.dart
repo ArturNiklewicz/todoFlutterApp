@@ -10,7 +10,7 @@ class SubTaskScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Second Route'),
+        title: Text(todo.title),
       ),
       body: Center(
         child: Column(
@@ -22,7 +22,7 @@ class SubTaskScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text(todo.title),
+              child: Text(todo.weight.toStringAsPrecision(2)),
             ),
           ],
         ), /* SubTaskList(), */
