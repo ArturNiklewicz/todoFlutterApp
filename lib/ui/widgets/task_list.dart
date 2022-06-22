@@ -21,6 +21,7 @@ class TaskList extends StatelessWidget {
                 itemCount: tasks!.length,
                 itemBuilder: (context, index) {
                   return TaskCard(
+                    task: tasks![index],
                     taskName: tasks![index].title,
                     taskWeight: tasks![index].weight,
                     taskDeadline: tasks![index].deadline,
@@ -34,6 +35,7 @@ class TaskList extends StatelessWidget {
 }
 
 class TaskCard extends StatefulWidget {
+  Todo task;
   String taskName;
   double taskWeight;
   DateTime taskDeadline;
@@ -41,6 +43,7 @@ class TaskCard extends StatefulWidget {
 
   TaskCard(
       {Key? key,
+      required this.task,
       required this.taskName,
       required this.taskWeight,
       required this.taskDeadline,
@@ -113,7 +116,8 @@ class _TaskCardState extends State<TaskCard> {
         // Go to SubTaskScreen
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => Text('j')),
+          MaterialPageRoute(
+              builder: (context) => SubTaskScreen(todo: widget.task)),
         );
       },
     );
