@@ -22,10 +22,6 @@ class TaskList extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return TaskCard(
                     task: tasks![index],
-                    taskName: tasks![index].title,
-                    taskWeight: tasks![index].weight,
-                    taskDeadline: tasks![index].deadline,
-                    taskStatus: tasks![index].status,
                   );
                   // return TaskCard();
                 },
@@ -36,19 +32,8 @@ class TaskList extends StatelessWidget {
 
 class TaskCard extends StatefulWidget {
   Todo task;
-  String taskName;
-  double taskWeight;
-  DateTime taskDeadline;
-  bool taskStatus = false;
 
-  TaskCard(
-      {Key? key,
-      required this.task,
-      required this.taskName,
-      required this.taskWeight,
-      required this.taskDeadline,
-      required this.taskStatus})
-      : super(key: key);
+  TaskCard({Key? key, required this.task}) : super(key: key);
 
   @override
   State<TaskCard> createState() => _TaskCardState();
@@ -82,19 +67,19 @@ class _TaskCardState extends State<TaskCard> {
             Checkbox(
                 checkColor: Colors.white,
                 fillColor: MaterialStateProperty.resolveWith(getColor),
-                value: widget.taskStatus,
+                value: widget.task.status,
                 onChanged: (bool? value) {
                   setState(() {
-                    widget.taskStatus = value!;
+                    widget.task.status = value!;
                     /*  widget.taskStatus = value!; */
                   });
                 }),
-            Text('Weight: ' + widget.taskWeight.toStringAsPrecision(2)),
+            Text('Weight: ' + widget.task.weight.toStringAsPrecision(2)),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 FittedBox(
-                  child: Text(widget.taskName,
+                  child: Text(widget.task.title,
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                 ),
@@ -104,7 +89,7 @@ class _TaskCardState extends State<TaskCard> {
                       'Your next milestone',
                     ),
                     Text(DateFormat('dd/MM/yyyy H:m')
-                        .format(widget.taskDeadline)),
+                        .format(widget.task.deadline)),
                   ],
                 )
               ],
