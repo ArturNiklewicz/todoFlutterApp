@@ -1,9 +1,12 @@
 class SubTask {
-  String name;
+  String title;
   String description;
+  bool mandatory;
+  bool status;
 
-  SubTask({
-    required this.name,
-    required this.description,
-  });
+  SubTask(
+      {required this.title,
+      required this.description,
+      required this.mandatory,
+      required this.status});
 }
