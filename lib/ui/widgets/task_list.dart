@@ -2,7 +2,6 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_app/models/todo.dart';
-import 'package:todo_app/ui/screens/todos_screen.dart';
 import 'package:todo_app/ui/screens/subtask_screen.dart';
 
 class TaskList extends StatelessWidget {
