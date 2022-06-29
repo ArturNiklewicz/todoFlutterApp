@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/models/todo.dart';
-import 'package:todo_app/ui/screens/subtask_screen.dart';
 import 'package:todo_app/ui/widgets/new_task.dart';
 import 'package:todo_app/ui/widgets/task_list.dart';
 

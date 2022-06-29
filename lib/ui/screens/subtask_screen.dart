@@ -36,6 +36,13 @@ class SubTaskScreen extends StatelessWidget {
         Text(DateFormat('dd/MM/yyyy H:m').format(todo.deadline)),
         SubTaskList(todoSubTasks),
       ]),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // _showAddTaskPopUp();
+        },
+        tooltip: 'Add a task',
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
