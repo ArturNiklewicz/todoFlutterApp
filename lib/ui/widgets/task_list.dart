@@ -94,7 +94,7 @@ class _TaskCardState extends State<TaskCard> {
                       'Your next milestone',
                     ),
                     Text(DateFormat('dd/MM/yyyy H:m')
-                        .format(widget.task.deadline)),
+                        .format(widget.task.milestone)),
                   ],
                 )
               ],

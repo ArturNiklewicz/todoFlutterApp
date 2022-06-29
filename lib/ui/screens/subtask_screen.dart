@@ -33,7 +33,7 @@ class SubTaskScreen extends StatelessWidget {
         Text(
           'Your next milestone',
         ),
-        Text(DateFormat('dd/MM/yyyy H:m').format(todo.deadline)),
+        Text(DateFormat('dd/MM/yyyy H:m').format(todo.milestone)),
         SubTaskList(todoSubTasks),
       ]),
       floatingActionButton: FloatingActionButton(

@@ -3,6 +3,8 @@ import 'package:todo_app/models/todo.dart';
 import 'package:todo_app/ui/widgets/new_task.dart';
 import 'package:todo_app/ui/widgets/task_list.dart';
 
+import '../../database/todos_database.dart';
+
 class TodosScreen extends StatefulWidget {
   const TodosScreen({Key? key}) : super(key: key);
 
@@ -14,7 +16,7 @@ class _TodosScreenState extends State<TodosScreen> {
   final String title = "#1 TODO App";
   double _weight = 1.0;
   static List<Todo> userTasks = [
-    Todo(deadline: DateTime.now(), title: 'Dupa', weight: 1, status: false)
+    Todo(milestone: DateTime.now(), title: 'Dupa', weight: 1, status: false)
   ];
 
   @override
@@ -60,30 +62,18 @@ class AddTaskPopUp extends StatefulWidget {
 class _AddTaskPopUpState extends State<AddTaskPopUp> {
   DateTime today = DateTime.now();
 
-  void addNewTask(String title, double weight, DateTime deadline, bool status) {
-    final newTask = Todo(
+  Future addTodo(
+      String title, double weight, DateTime milestone, bool status) async {
+    final newTodo = Todo(
         title: title,
         weight: weight,
-        deadline: deadline.toString().isEmpty ? today : deadline,
+        milestone: milestone.toString().isEmpty ? today : milestone,
         status: status);
-
-    setState(() {
-      _TodosScreenState.userTasks.add(newTask);
-    });
-    int i = 0;
-    bool endOfLoop = i <= _TodosScreenState.userTasks.length;
-    for (Todo todo in _TodosScreenState.userTasks) {
-      if (endOfLoop == false) {
-        print(_TodosScreenState.userTasks[i].toString());
-        i++;
-      } else {
-        break;
-      }
-    }
+    await TodosDatabase.instance.create(newTodo);
   }
 
   @override
   Widget build(BuildContext context) {
-    return NewTask(addNewTask);
+    return NewTask(addTodo);
   }
 }
