@@ -1,5 +1,6 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:todo_app/models/subtask.dart';
 
 class SubTaskList extends StatelessWidget {
@@ -31,17 +32,12 @@ class SubTaskList extends StatelessWidget {
   }
 }
 
-class SubTaskCard extends StatefulWidget {
+class SubTaskCard extends HookWidget {
   // Creating variables
   SubTask subTask;
   // Variable initialization
   SubTaskCard({Key? key, required this.subTask}) : super(key: key);
 
-  @override
-  State<SubTaskCard> createState() => _SubTaskCardState();
-}
-
-class _SubTaskCardState extends State<SubTaskCard> {
   @override
   Widget build(BuildContext context) {
     // Creating variables holding screen's size for the tasks' size
@@ -67,20 +63,22 @@ class _SubTaskCardState extends State<SubTaskCard> {
       width: screenWidth,
       child: Card(
         child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          Checkbox(
-              checkColor: Colors.white,
-              fillColor: MaterialStateProperty.resolveWith(getColor),
-              value: widget.subTask.status,
-              onChanged: (bool? value) {
-                setState(() {
-                  widget.subTask.status = value!;
+          HookBuilder(builder: (_) {
+            final toggle = useState(false);
+            return Checkbox(
+                checkColor: Colors.white,
+                fillColor: MaterialStateProperty.resolveWith(getColor),
+                value: subTask.status,
+                onChanged: (bool? value) {
+                  toggle.value = !toggle.value;
+                  subTask.status = toggle.value;
                 });
-              }),
+          }),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               FittedBox(
-                child: Text(widget.subTask.title,
+                child: Text(subTask.title,
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
               ),

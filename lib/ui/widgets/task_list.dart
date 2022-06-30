@@ -1,5 +1,6 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_app/models/todo.dart';
 import 'package:todo_app/ui/screens/subtask_screen.dart';
@@ -32,17 +33,10 @@ class TaskList extends StatelessWidget {
   }
 }
 
-class TaskCard extends StatefulWidget {
-  // Creating variables
+class TaskCard extends HookWidget {
   Todo task;
-  // Variable initialization
-  TaskCard({Key? key, required this.task}) : super(key: key);
+  TaskCard({required this.task});
 
-  @override
-  State<TaskCard> createState() => _TaskCardState();
-}
-
-class _TaskCardState extends State<TaskCard> {
   @override
   Widget build(BuildContext context) {
     // Creating variables holding screen's size for the tasks' size
@@ -70,21 +64,29 @@ class _TaskCardState extends State<TaskCard> {
         child: Card(
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            Checkbox(
-                checkColor: Colors.white,
-                fillColor: MaterialStateProperty.resolveWith(getColor),
-                value: widget.task.status,
-                onChanged: (bool? value) {
-                  setState(() {
-                    widget.task.status = value!;
-                  });
-                }),
-            Text('Weight: ' + widget.task.weight.toStringAsPrecision(2)),
+            HookBuilder(
+              builder: (_) {
+                final toggle = useState(false);
+                return Checkbox(
+                  checkColor: Colors.white,
+                  fillColor: MaterialStateProperty.resolveWith(getColor),
+                  value: toggle.value,
+                  onChanged: (bool? value) {
+                    toggle.value = !toggle.value;
+                    task.status = toggle.value;
+                    print("\n");
+                    print(task.title + ": ");
+                    print(task.status);
+                  },
+                );
+              },
+            ),
+            Text('Weight: ' + task.weight.toStringAsPrecision(2)),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 FittedBox(
-                  child: Text(widget.task.title,
+                  child: Text(task.title,
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                 ),
@@ -93,8 +95,7 @@ class _TaskCardState extends State<TaskCard> {
                     Text(
                       'Your next milestone',
                     ),
-                    Text(DateFormat('dd/MM/yyyy H:m')
-                        .format(widget.task.milestone)),
+                    Text(DateFormat('dd/MM/yyyy H:m').format(task.milestone)),
                   ],
                 )
               ],
@@ -107,8 +108,7 @@ class _TaskCardState extends State<TaskCard> {
         // Go to SubTaskScreen
         Navigator.push(
           context,
-          MaterialPageRoute(
-              builder: (context) => SubTaskScreen(todo: widget.task)),
+          MaterialPageRoute(builder: (context) => SubTaskScreen(todo: task)),
         );
       },
     );
