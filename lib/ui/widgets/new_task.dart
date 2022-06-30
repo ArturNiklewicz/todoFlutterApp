@@ -31,7 +31,8 @@ class _NewTaskState extends State<NewTask> {
   void _submitTask() {
     _checkName();
     status = false;
-    widget.addTask(enteredName, _value, selectedDate, status);
+    widget.addTask(
+        enteredName, _value, selectedDate, status); //todo: sprawdzić widget.
   }
 
   @override

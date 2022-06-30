@@ -6,7 +6,7 @@ import 'package:todo_app/ui/widgets/task_list.dart';
 import '../../database/todos_database.dart';
 
 class TodosScreen extends StatefulWidget {
-  const TodosScreen({Key? key}) : super(key: key);
+  TodosScreen({Key? key}) : super(key: key);
 
   @override
   State<TodosScreen> createState() => _TodosScreenState();
@@ -14,10 +14,25 @@ class TodosScreen extends StatefulWidget {
 
 class _TodosScreenState extends State<TodosScreen> {
   final String title = "#1 TODO App";
+  late List<Todo> todos;
+  bool isLoading = false;
   double _weight = 1.0;
-  static List<Todo> userTasks = [
-    Todo(milestone: DateTime.now(), title: 'Dupa', weight: 1, status: false)
-  ];
+
+  void initState() {
+    super.initState();
+    refreshTodos();
+  }
+
+  void dispose() {
+    super.dispose();
+    TodosDatabase.instance.close();
+  }
+
+  Future refreshTodos() async {
+    setState(() => isLoading = true);
+    this.todos = await TodosDatabase.instance.readAllTodos();
+    setState(() => isLoading = false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +40,11 @@ class _TodosScreenState extends State<TodosScreen> {
       appBar: AppBar(
         title: Text(title),
       ),
-      body: TaskList(userTasks),
+      body: isLoading
+          ? CircularProgressIndicator()
+          : todos.isEmpty
+              ? Text("No todos")
+              : TaskList(todos),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _showAddTaskPopUp();

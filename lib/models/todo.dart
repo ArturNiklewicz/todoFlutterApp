@@ -1,7 +1,13 @@
 final String tableTodos = 'todos';
 
 class TodoFields {
-  static final List<String> values = [id, title, weight, milestone, status];
+  static final List<String> values = [
+    id,
+    title,
+    weight,
+    milestone,
+    status,
+  ];
   static final String id = '_id';
   static final String title = 'title';
   static final String weight = 'weight';
@@ -43,7 +49,7 @@ class Todo {
         id: json[TodoFields.id] as int?,
         title: json[TodoFields.title] as String,
         weight: json[TodoFields.weight] as double,
-        milestone: DateTime.parse([TodoFields.milestone] as String),
+        milestone: DateTime.parse(json[TodoFields.milestone] as String),
         status:
             json[TodoFields.status] == 1, // TODO! check what status should be
       );

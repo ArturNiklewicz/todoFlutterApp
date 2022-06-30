@@ -9,8 +9,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: '/home',
       routes: {
-        '/home': (context) => const TodosScreen(),
-        
+        '/home': (context) => TodosScreen(),
       },
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue),

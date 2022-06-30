@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:todo_app/models/todo.dart';
@@ -23,7 +21,6 @@ class TodosDatabase {
   Future<Database> _initDB(String filePath) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
-    print('\nPath to database\n' + path + "\n");
 
     return await openDatabase(path, version: 1, onCreate: _createDB);
   }
@@ -35,12 +32,13 @@ class TodosDatabase {
     final floatType = 'FLOAT NOT NULL';
 
     await db.execute('''
-CREATE TABLE $tableTodos 
+CREATE TABLE $tableTodos (
   ${TodoFields.id} $idType,
   ${TodoFields.title} $textType,
   ${TodoFields.weight} $floatType,
   ${TodoFields.milestone} $textType,
   ${TodoFields.status} $boolType
+  )
 ''');
   }
 
